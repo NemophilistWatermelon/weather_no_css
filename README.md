@@ -32,3 +32,30 @@
 ## 使用方法
 1 直接克隆获下载``html`` 文件并且 tfjs.js 与 其是同级目录下
 2 下载好之后直接点开运行，输入查询城市。
+
+
+
+## 提供查询天气 API 接口
+```js
+ `http://wthrcdn.etouch.cn/weather_mini?city=${cityVal}`
+  cityVal => 是 城市值
+  // 使用方法：
+  var url = `http://wthrcdn.etouch.cn/weather_mini?city=${cityVal}`;
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "JSONP",
+                success: function(data) {
+                  // todo success
+                  // 我的建议
+                  // 这样data 就变成了 对象 里面有数组，你可以分析下使用格式，看你自己的想法了...
+                  var data = data.data  
+                },
+                error: function(err) {
+                    if (err) {
+                       // todo err...
+                    }
+                }
+            })
+     // 比较坑的是： 成功之后返回的对象是一个大data  你需要 变成 var data = data.data; 这样来使用;可以输入到控制台查看结果
+```
