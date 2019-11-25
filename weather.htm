@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    :root {
+        --red: rgb(217, 0, 0);
+    }
+
+    header,
+    main,
+    footer {
+        width: 55%;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .view-big {
+        font-size: 18px;
+
+        font-weight: bold;
+    }
+
+    .view-big,
+    .red-title {
+        margin: 0 5px;
+    }
+
+    .red-title {
+        color: var(--red);
+        margin: 0 5px;
+    }
+
+    .show-future label {
+        w margin: 5px;
+    }
+</style>
+
+<body>
+    <header class="weather-site-title">
+        <h1>查询天气</h1>
+        <p>使用方法：在文本框中输入您要查询的<em class="view-big">城市</em>即可例如：<em class="view-big">河南</em></p>
+    </header>
+    <main class="weather-wrapper">
+        <div class="weather-input-group">
+            <label for="">请输入城市:
+                <input type="text" id="id-city-val" value="河南">
+            </label>
+            <button id="id-btn-search">点击查询</button>
+        </div>
+
+        <!-- 返回效果 JSONP 跨域 -->
+        <div class="weather-box">
+
+        </div>
+    </main>
+    <footer>
+        <section>_author_Kevin_version?nocss</section>
+        <section><a href="https://github.com/Keviniswhite">gitHub:xiaoKevin</a></section>
+    </footer>
+
+</body>
+<script src="tfjs.js"></script>
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js">
+
+</script>
+<script>
+    !(function() {
+        // 拿到指定元素 城市值 及 搜索
+        var getEles = function() {
+            var btn = e("#id-btn-search");
+            var city = e("#id-city-val");
+            var weatherBox = e(".weather-box");
+
+            var o = {
+                btn,
+                city,
+                weatherBox,
+            }
+            return o;
+        }
+
+        var loadTempalte = function(data) {
+            var data = data.data;
+            var name = data.forecast;
+            var length = name.length;
+            var smallTemplate = "";
+            for (var i = 0; i < length; i++) {
+                smallTemplate += `<div class="show-future"><label for="">${name[i].date}</label><label for="">${name[i].high}</label><label for="">${name[i].fengli}</label><label for="">
+            ${name[i].low}</label><label for="">${name[i].type}</label><label for="">${name[i].fengxiang}</label></div>`
+            }
+
+            var template = `<label for="">查询城市: <em class="red-title">${data.city}</em></label>
+            <label for="">温度：<span>${data.wendu}℃</span></label>
+            <div>
+                <span>预报未来5天天气状况</span>
+                <section class="yubao">
+                      ${smallTemplate}
+                </section>
+            </div>
+            <div class="friendTips">
+                <p>友情提示：${data.ganmao}</p>
+            </div>
+            <div class="yesterday">
+                <section>昨天 <em class="red-title">${data.city}</em>天气状况</section>
+                <p>
+                    <span>昨天日期：</span>   <span>${data.yesterday.date}</span>
+                </p>
+                <p>
+                    <span>昨天风力：</span> <span>${data.yesterday.fl}</span>
+                </p>
+                <p>
+                        <span>昨天风向：</span><span>${data.yesterday.fx}</span>
+                </p>
+                <p>
+                        <span>昨天高温：</span>    <span>${data.yesterday.high}</span>
+                </p>
+                <p>
+                        <span>昨天低温：</span>  <span>${data.yesterday.low}</span>
+                </p>
+                <p>
+                    <span>昨天类型：</span> <span>${data.yesterday.type}</span>
+                </p>
+
+
+
+            </div>`;
+
+
+            return template;
+
+        }
+        var insertTemplate = function(data) {
+            var weatherBox = getEles()["weatherBox"];
+            weatherBox.innerHTML = loadTempalte(data);
+        }
+        // 点击按钮执行的查询天气
+        var sendCity_getWeather = function(cityVal) {
+            var url = `http://wthrcdn.etouch.cn/weather_mini?city=${cityVal}`;
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "JSONP",
+                // xhrFields: {
+                //     withCredentials: true // 这里设置了withCredentials
+                // },
+                success: function(data) {
+                    insertTemplate(data);
+                },
+                error: function(err) {
+                    if (err) {
+                        alert("输入不正确")
+                    }
+                }
+            })
+        }
+        var toSearch_cityWeather = function() {
+            var cityVal = getEles()["city"].value;
+            if (cityVal === "") {
+                alert("请输入需要查询天气的城市名称如：河南")
+                return;
+            }
+            sendCity_getWeather(cityVal);
+        }
+        var bindEventForSearchBtn_cityWeather = function() {
+            var btn = getEles()["btn"];
+            // log(btn)
+            bindEvent(btn, 'click', toSearch_cityWeather);
+        }
+
+
+        var __main = function() {
+            bindEventForSearchBtn_cityWeather();
+        }
+        // 入口函数启动
+        __main()
+
+
+    })();
+</script>
+
+</html>
