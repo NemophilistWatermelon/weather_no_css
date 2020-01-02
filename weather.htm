@@ -140,7 +140,7 @@
             weatherBox.innerHTML = loadTempalte(data);
         }
         // 点击按钮执行的查询天气
-        var sendCity_getWeather = function(cityVal) {
+        var sendCityVal = function(cityVal) {
             var url = `http://wthrcdn.etouch.cn/weather_mini?city=${cityVal}`;
             $.ajax({
                 type: "GET",
@@ -159,18 +159,18 @@
                 }
             })
         }
-        var toSearch_cityWeather = function() {
+        var searchCityByInputVal = function() {
             var cityVal = getEles()["city"].value;
             if (cityVal === "") {
                 alert("请输入需要查询天气的城市名称如：河南")
                 return;
             }
-            sendCity_getWeather(cityVal);
+            sendCityVal(cityVal);
         }
         var bindEventForSearchBtn_cityWeather = function() {
             var btn = getEles()["btn"];
             // log(btn)
-            bindEvent(btn, 'click', toSearch_cityWeather);
+            bindEvent(btn, 'click', searchCityByInputVal);
         }
 
 
