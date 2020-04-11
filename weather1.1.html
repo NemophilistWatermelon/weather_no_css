@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    :root {
+        --red: rgb(217, 0, 0);
+    }
+
+    ::selection {
+        background-color: rgba(255, 208, 208, 0.5);
+    }
+
+    header,
+    main,
+    footer {
+        width: 55%;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .weather-item .show-future {
+        margin: 2rem 0;
+        border: 2px dashed;
+        padding: 13px;
+    }
+
+    .weather-item .show-future label {
+        margin: 5px;
+        text-align: justify;
+
+
+
+    }
+
+    #id-city-val:focus {
+        outline: none;
+
+    }
+</style>
+
+<style>
+    .main-body {
+        background-color: #333
+    }
+
+    .weather-input-group {
+        vertical-align: baseline;
+    }
+
+    #id-city-val {
+        background-color: transparent;
+        color: #fee;
+        width: 40%;
+        height: 40px;
+        vertical-align: middle;
+        text-align: center;
+        letter-spacing: 8px;
+        font-size: 20px;
+        font-weight: bold;
+        transition: all .3s;
+        border: none;
+        margin: 0 15px;
+        border-bottom: 1px solid #fff;
+    }
+
+
+    #id-btn-search {
+        height: 43px;
+        color: white;
+        border: none;
+        background-color: crimson;
+    }
+
+    .opcity {
+        animation: _opacity 1s forwards;
+    }
+
+    @keyframes _opacity {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .weather-input-group label,
+    .weahterApp-tilte {
+        color: #fee
+    }
+
+    .weather-tips {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        padding: 15px;
+        color: #949494;
+    }
+
+    .weahterApp-tilte {
+        margin: 0;
+        font-size: 5rem;
+        text-shadow: -0.06em 0 red, 0.06em 0 cyan;
+    }
+</style>
+<style>
+    /* 加载 天气 数据dom */
+    em {
+        font-style: normal;
+    }
+
+    .weather-item {
+        text-align: left;
+        text-indent: 1em;
+        color: #fff;
+        margin: 10px 0;
+        padding: 15px;
+        background-color: crimson;
+        border-radius: 3px;
+
+    }
+
+    .weather-item .city {
+        color: #ccc;
+        font-size: 1.3rem;
+    }
+
+    .weather-item .weather-temperature {
+        font-size: 2rem;
+    }
+</style>
+
+<body class="main-body">
+    <header class="weather-site-title">
+        <h1 class='weahterApp-tilte'>☁</h1>
+        <p class="weather-tips">使用方法：在文本框中输入您要查询的城市即可例如：<em class="view-big">河南</em></em></p>
+    </header>
+    <main class="weather-wrapper">
+        <div class="weather-input-group">
+            <label for="">请输入城市:</label>
+            <input type="text" id="id-city-val" autofocus>
+            <button id="id-btn-search">点击查询</button>
+        </div>
+
+        <!-- 返回效果 JSONP 跨域 -->
+        <div class="weather-box">
+
+        </div>
+    </main>
+    <footer>
+        <section>_author_Kevin_version?nocss</section>
+        <section><a href="https://github.com/Keviniswhite">gitHub:xiaoKevin</a></section>
+    </footer>
+
+</body>
+<script src="tfjs.js"></script>
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js">
+</script>
+<script>
+</script>
+<script>
+
+    !(function () {
+        // 拿到指定元素 城市值 及 搜索
+        var getEles = function () {
+            var btn = e("#id-btn-search");
+            var city = e("#id-city-val");
+            var weatherBox = e(".weather-box");
+
+            var o = {
+                btn,
+                city,
+                weatherBox,
+            }
+            return o;
+        }
+
+        var loadTempalte = function (data) {
+            var data = data.data;
+            var name = data.forecast;
+            var length = name.length;
+            var smallTemplate = "";
+            for (var i = 0; i < length; i++) {
+
+                smallTemplate += `
+                <div class="show-future">
+                    <label for="">${name[i].date.trim()}</label>
+                    <label for="">${name[i].high.trim()}</label>
+                    <label for="">${name[i].low.trim()}</label>
+                    <label for="">${name[i].type.trim()}</label>
+                    <label for="">${name[i].fengxiang.trim()}</label>
+                </div>`
+            }
+
+            var template = `
+            <section class="weather-item">
+                <label for="">查询城市: <em class="city">${data.city}</em></label>
+                <label for="">当前温度：<span class="weather-temperature
+                    ">${data.wendu}°C</span></label>
+            </section>
+
+            <section class="weather-item weahter-future">
+                <span>预报未来5天天气状况</span>
+                <section class="yubao">
+                    ${smallTemplate}
+                </section>
+            </section>
+
+            <section class="weather-item">
+                <p>友情提示：${data.ganmao}</p>
+            </section>
+
+            <section class="weather-item yesterday">
+                <section>昨天天气状况</section>
+                <p>
+                    <span>昨天日期：</span> <span>${data.yesterday.date}</span>
+                </p>
+                <p>
+                    <span>昨天风力：</span> <span>${data.yesterday.fl}</span>
+                </p>
+                <p>
+                    <span>昨天风向：</span><span>${data.yesterday.fx}</span>
+                </p>
+                <p>
+                    <span>昨天高温：</span> <span>${data.yesterday.high}</span>
+                </p>
+                <p>
+                    <span>昨天低温：</span> <span>${data.yesterday.low}</span>
+                </p>
+                <p>
+                    <span>昨天类型：</span> <span>${data.yesterday.type}</span>
+                </p>
+            </section>>`;
+            return template;
+
+        }
+        var insertTemplate = function (data) {
+            var weatherBox = getEles()["weatherBox"];
+            weatherBox.innerHTML = loadTempalte(data);
+            weahteBoxOpcity(weatherBox)
+        }
+        var toggleClass = function (t, className) {
+            t.classList.add(className)
+            setTimeout(function () {
+                t.classList.remove(className)
+            }, 2000)
+        }
+        var weahteBoxOpcity = function (target) {
+            // classAnimate
+            var opcity = 'opcity'
+
+            toggleClass(target, opcity)
+        }
+        // 点击按钮执行的查询天气
+        var sendCityVal = function (cityVal) {
+            var url = `http://wthrcdn.etouch.cn/weather_mini?city=${cityVal}`;
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "JSONP",
+                // xhrFields: {
+                //     withCredentials: true // 这里设置了withCredentials
+                // },
+                success: function (data) {
+                    insertTemplate(data);
+                },
+                error: function (err) {
+                    if (err) {
+                        alert("输入不正确")
+                    }
+                }
+            })
+        }
+        var checkCity = function () {
+            var cityVal = getEles()["city"].value;
+            if (cityVal === "") {
+                alert("请输入需要查询天气的城市名称如：河南")
+                return false;
+            }
+            return cityVal
+        }
+        var searchCityByInputVal = function (event) {
+
+            var eventType = event.type;
+            if (eventType == 'click') {
+
+                checkCity() && sendCityVal(checkCity());
+
+            } else if (eventType == 'keyup') {
+                var code = event.keyCode;
+                // 回车
+
+                if (code === 13) {
+                    checkCity() && sendCityVal(checkCity());
+                }
+            }
+        }
+        var bindEvents = function () {
+            var btn = getEles()["btn"];
+            var input = getEles()['city']
+            log(input)
+            // log(btn)
+            bindEvent(btn, 'click', searchCityByInputVal);
+            bindEvent(input, 'keyup', searchCityByInputVal)
+        }
+
+
+        var __main = function () {
+            bindEvents();
+        }
+        // 入口函数启动
+        __main()
+
+
+    })();
+</script>
+
+</html>
