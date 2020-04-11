@@ -2,7 +2,7 @@
  Jquery_JSONP 查询天气
 ## 运行结果图
 
-![images](https://github.com/Keviniswhite/weather_no_css/blob/master/end.png)
+![images](https://github.com/Keviniswhite/weather_no_css/blob/master/weather.png)
 ## 实现介绍
 - 首先打开weather.html文件
 ``引入了 tfjs.js 文件 ``  该文件主要用来操作Dom,绑定事件及相关用法
